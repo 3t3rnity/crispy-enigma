@@ -40,21 +40,35 @@ export default class Engine implements EngineInterface {
             this.canvas.width / 2 - this.ball.width / 2,
             this.canvas.height - this.paddle.height * 2,
             "black",
-            5,
+            2,
             this.context
         );
     }
 
     public start(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.Paddle.render();
         this.Ball.render();
-        this.Level.render();
+        this.Paddle.render(this.Ball);
+        this.Level.render(this.Ball);
+
+        
+        this.gameFieldCollision()
         this.renderField();
-        console.log(this.Level.structure)
 
 
         requestAnimationFrame(() => this.start());
+    }
+
+    private gameFieldCollision(): void {
+        if(this.Ball.collides({ x: 0, y: 0, width: this.canvas.width, height: this.canvas.height })) {
+            if(this.Ball.y < 0) {
+                this.Ball.dx *= 1
+                this.Ball.dy *= -1
+            }else{
+                this.Ball.dx *= -1
+                this.Ball.dy *= 1
+            }
+        }
     }
 
     private renderField(): void {

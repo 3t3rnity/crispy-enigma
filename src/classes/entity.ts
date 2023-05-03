@@ -23,7 +23,7 @@ export default class Entity {
     }
 
     public collides(objInstance: any) {
-        return (
+        return !(
             this.x < objInstance.x + objInstance.width &&
             this.x + this.width > objInstance.x &&
             this.y < objInstance.y + objInstance.height &&
@@ -31,8 +31,14 @@ export default class Entity {
         );
     }
 
-    public render(): void {
+    public render(object: any): void {
         this.canvasApi.fillStyle = this.color;
         this.canvasApi.fillRect(this.x, this.y, this.width, this.height);
+        if(object) {
+            if(this.collides(object)) {
+                object.dx *= 1
+                object.dy *= -1
+            }
+        }
     }
 }
